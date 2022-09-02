@@ -1,0 +1,40 @@
+{
+  "name": "beoble-test-project",
+  "version": "1.0.0",
+  "description": "Beoble Test Project",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack serve --port 3000",
+    "build": "cross-env NODE_ENV=production webpack",
+    "start": "cross-env NODE_ENV=production webpack && npx serve dist"
+  },
+  "keywords": [
+    "react",
+    "web3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chidodev/beoble.git"
+  },
+  "author": "Donald",
+  "license": "ISC",
+  "homepage": "https://github.com/chidodev#readme",
+  "dependencies": {
+    "ethers": "^5.7.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.6.1",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.8.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.10.1"
+  }
+}
