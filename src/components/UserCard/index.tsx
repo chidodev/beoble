@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 
-import { FaWallet, FaArrowRight } from "react-icons/fa";
+import { FaWallet, FaRegDotCircle } from "react-icons/fa";
 
 import Detail from "./detail";
 
@@ -141,7 +141,7 @@ export default function UserCard({
             return (
                 <Detail
                     ENSName={ENSName}
-                    openOptions={() => setWalletView(WALLET_VIEWS.INIT)}
+                    disconnect={() => setWalletView(WALLET_VIEWS.INIT)}
                 />
             );
         }
@@ -149,7 +149,7 @@ export default function UserCard({
         return (
             <>
                 <p className="wallet-exit">
-                    {/* <i className="fas fa-times"></i> */}
+                    <FaRegDotCircle />
                 </p>
                 <p className="wallet-address">Wallet Address Will Appear Here.</p>
 
@@ -169,13 +169,18 @@ export default function UserCard({
 
     function getAction() {
         if (account && walletView === WALLET_VIEWS.ACCOUNT) {
+            // Sign message
             return (
-            
-                <Detail
-                    ENSName={ENSName}
-                    openOptions={() => setWalletView(WALLET_VIEWS.INIT)}
+                <Button
+                    id="sign"
+                    onClick={() => {
+                        alert('ok')
+                    }}
+                
+                    header="Sign Message"
+                    subheader="content='Hello, Beoble!'"
+                    icon={'https://cdn.cdnlogo.com/logos/m/79/metamask.svg'}
                 />
-        
             );
         }
 

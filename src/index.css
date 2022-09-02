@@ -171,6 +171,11 @@
 	color: rgba(255, 255, 255, 0.9);
   }
   
+
+  .wallet-link {
+	margin: 0px;
+  }
+
   .wallet-link::after {
 	position: absolute;
 	top: 25px;
@@ -188,7 +193,9 @@
   
   .wallet-exit {
 	grid-row: 1/2;
+	grid-column: 2/2;
 	justify-self: end;
+	margin: 0px;
   }
   
   .wallet-icon {
@@ -198,7 +205,6 @@
   
   .wallet-address {
 	grid-row: 2/3;
-	margin-top: 0;
 	color: #ffffff;
 	text-align: end;
   }

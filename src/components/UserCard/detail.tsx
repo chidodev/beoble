@@ -1,58 +1,65 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
+import { ethers } from 'ethers';
 import { useWeb3React } from "@web3-react/core";
 
 import { NETWORK_LABELS } from "../../utils/constants";
 
+// import disconnect icon
+import { FaSignOutAlt } from "react-icons/fa";
+
 interface DetailsProps {
-  ENSName?: string;
-  openOptions: () => void;
+    ENSName?: string;
+    disconnect: () => void;
 }
 
 export default function Detail({
-  ENSName,
-  openOptions,
+    ENSName,
+    disconnect,
 }: DetailsProps): JSX.Element {
-  const { chainId, account, connector } = useWeb3React();
-  const userEthBalance = "100";
+    const { chainId, account, connector } = useWeb3React();
 
-  return (
-    <div>
-      <div>
-        <p>
-          Connected
-        </p>
+    const [balance, setBalance] = useState('');
+    const [ensName, setEnsName] = useState<string|null>(null);
 
-        <button
-          onClick={() => {
-            openOptions();
-          }}
-        >
-          disconnect
-        </button>
-      </div>
-      <div>
-        <div>
+    useEffect(() => {
+        async function getBalance() {
 
-          {account && (
-            <span>
-              {userEthBalance ?? "0.00"} ETH
-            </span>
-          )}
-          {chainId && NETWORK_LABELS[chainId] && (
-            <span>
-              {NETWORK_LABELS[chainId]}
-            </span>
-          )}
-        </div>
+            const network = NETWORK_LABELS[chainId!].toLocaleLowerCase();
 
-      </div>
+            const provider = ethers.getDefaultProvider(network);
+        
+            if(account) {
+                const balance = await provider.getBalance(account);
+                const ensName = await provider.lookupAddress(account);
+                console.log(ensName);
+                setBalance(ethers.utils.formatEther(balance));
+                setEnsName(ensName);
+            }
+        
+        }
 
-      <div>
-        <div>
-          {ENSName ? <>{ENSName}</> : <>{account}</>}
-        </div>
-      </div>
-    </div>
-  );
+        getBalance();
+    }, [chainId])
+    
+    return (
+        <>
+            <p className="wallet-exit">
+                <a className="wallet-link" href="#" onClick={disconnect}>
+                    <FaSignOutAlt />
+                </a>
+            </p>
+            <p className="wallet-address">
+                {ensName ? <>{ensName}</> : <>{account}</>}
+            </p>
+
+            <p className="wallet-chain">
+                <span>
+                    {NETWORK_LABELS[chainId!]}
+                </span>
+            </p>
+            <p className="wallet-balance">{balance} ETH</p>
+        </>
+
+    );
 }
