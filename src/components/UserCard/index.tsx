@@ -187,6 +187,8 @@ export default function UserCard({
     async function signMessage(): Promise<any> {
 
         setSignErr(undefined);
+        setSig('');
+        setPubKey('');
 
         try {
             const from = account;
