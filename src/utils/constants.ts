@@ -37,3 +37,6 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         href: 'https://metamask.io/'
     }
 }
+
+// sign message
+export const SIGN_MESSAGE = 'Hello, Beoble!';

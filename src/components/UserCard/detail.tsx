@@ -32,7 +32,7 @@ export default function Detail({
             if(account) {
                 const balance = await provider.getBalance(account);
                 const ensName = await provider.lookupAddress(account);
-                console.log(ensName);
+            
                 setBalance(ethers.utils.formatEther(balance));
                 setEnsName(ensName);
             }

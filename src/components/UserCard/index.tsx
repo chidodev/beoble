@@ -2,14 +2,25 @@ import React, { useEffect, useState } from "react";
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 
-import { FaWallet, FaRegDotCircle } from "react-icons/fa";
+import { FaWallet, FaRegDotCircle, FaInfoCircle } from "react-icons/fa";
 
+const { hashMessage } = require("@ethersproject/hash");
+
+// buffer config
+import * as buffer from "buffer";
+(window as any).Buffer = buffer;
+
+// account detail component
 import Detail from "./detail";
+
+// import sign message
+import { SIGN_MESSAGE } from "../../utils/constants";
 
 import { injected, SUPPORTED_WALLETS } from "../../utils/constants";
 
 import Button from "./Button";
 import PendingView from "./Pending";
+import { ethers } from "ethers";
 
 type Listener = (...args: Array<any>) => void;
 
@@ -17,6 +28,7 @@ declare global {
     interface Window {
         ethereum?: {
             isMetaMask: boolean;
+            request?: any;
             on: (event: string, listener: Listener) => void;
             removeListener: (event: string, listener: Listener) => void;
         };
@@ -45,6 +57,11 @@ export default function UserCard({
 
     const [pendingError, setPendingError] = useState<boolean>();
     const [pendingErrorMsg, setPendingErrorMsg] = useState<string>("");
+
+    const [pubKey, setPubKey] = useState('');
+    const [sig, setSig] = useState('');
+
+    const [signErr, setSignErr] = useState<any>(undefined);
 
     useEffect(() => {
         if (active && !error) {
@@ -167,20 +184,66 @@ export default function UserCard({
 
     }
 
+    async function signMessage(): Promise<any> {
+
+        setSignErr(undefined);
+
+        try {
+            const from = account;
+            const msg = `0x${Buffer.from(SIGN_MESSAGE, 'utf8').toString('hex')}`;
+
+            const sign = await window.ethereum!.request({
+                method: 'personal_sign',
+                params: [msg, from, 'Example password'],
+            });
+
+            setSig(sign);
+
+            const pubKey = ethers.utils.recoverPublicKey(hashMessage(SIGN_MESSAGE), sign);
+
+            setPubKey(pubKey);
+            const recoveredAddress = ethers.utils.computeAddress(pubKey);
+
+            if (account !== recoveredAddress) setSignErr('something went wrong');
+
+        } catch (err: any) {
+            setSignErr(err.message);
+        }
+    };
+
     function getAction() {
         if (account && walletView === WALLET_VIEWS.ACCOUNT) {
+
             // Sign message
             return (
-                <Button
-                    id="sign"
-                    onClick={() => {
-                        alert('ok')
-                    }}
-                
-                    header="Sign Message"
-                    subheader="content='Hello, Beoble!'"
-                    icon={'https://cdn.cdnlogo.com/logos/m/79/metamask.svg'}
-                />
+                <>
+                    {signErr ? (
+
+                        <div className="wallet-alert">
+                            <FaInfoCircle color="red" />
+                            <span>{signErr}</span>
+
+                        </div>
+
+
+                    ) : (
+                        <div className="sign-info">
+                            <div> Signature: <br />
+                                {sig}
+                            </div>
+                            <div>PubKey: <br />
+                                {pubKey}
+                            </div>
+                        </div>
+                    )}
+                    <Button
+                        id="sign"
+                        onClick={signMessage}
+                        header="Sign Message"
+                        subheader="content='Hello, Beoble!'"
+                        icon={'https://cdn.cdnlogo.com/logos/m/79/metamask.svg'}
+                    />
+                </>
             );
         }
 
@@ -211,6 +274,9 @@ export default function UserCard({
 
                 {getInfo()}
             </div>
+
+            <hr style={{ marginBottom: '10px' }} />
+
             <div className="wallet-action">
 
                 {getAction()}

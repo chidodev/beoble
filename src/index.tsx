@@ -28,7 +28,7 @@ function MyApp(): JSX.Element {
                         </div>
 
                         <UserCard />
-
+                        
                         <div className="footer">
                             <p className="footer-credits">
                                 <a
