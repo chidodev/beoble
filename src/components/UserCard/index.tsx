@@ -11,7 +11,7 @@ import * as buffer from "buffer";
 (window as any).Buffer = buffer;
 
 // account detail component
-import Detail from "./detail";
+import Detail from "./Detail";
 
 // import sign message
 import { SIGN_MESSAGE } from "../../utils/constants";
