@@ -12,6 +12,9 @@
 	text-decoration: none;
   }
   
+  p {
+    word-break: break-word;
+  }
   /* HEADING FOOTER */
   
   .heading, .footer {

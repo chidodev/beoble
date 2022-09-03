@@ -8,6 +8,9 @@ import { NETWORK_LABELS } from "../../utils/constants";
 // import disconnect icon
 import { FaSignOutAlt } from "react-icons/fa";
 
+// import utils
+import shortenAddress from "../../utils/shortenAddress";
+
 interface DetailsProps {
     ENSName?: string;
     disconnect: () => void;
@@ -50,7 +53,7 @@ export default function Detail({
                 </a>
             </p>
             <p className="wallet-address">
-                {ensName ? <>{ensName}</> : <>{account}</>}
+                {ensName ? <>{ensName}</> : <>{shortenAddress(account!)}</>}
             </p>
 
             <p className="wallet-chain">
@@ -58,7 +61,7 @@ export default function Detail({
                     {NETWORK_LABELS[chainId!]}
                 </span>
             </p>
-            <p className="wallet-balance">{balance} ETH</p>
+            <p className="wallet-balance">{balance.substring(0, 5)} ETH</p>
         </>
 
     );
