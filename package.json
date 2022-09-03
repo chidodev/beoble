@@ -2,11 +2,11 @@
   "name": "beoble-test-project",
   "version": "1.0.0",
   "description": "Beoble Test Project",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "dev": "webpack serve --port 3000",
     "build": "cross-env NODE_ENV=production webpack",
-    "start": "cross-env NODE_ENV=production webpack && npx serve dist"
+    "start": "npx serve dist"
   },
   "keywords": [
     "react",

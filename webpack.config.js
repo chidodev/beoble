@@ -45,7 +45,8 @@ module.exports = {
         process: 'process/browser',
     }),
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      template: 'public/index.html',
+      favicon: 'public/favicon.ico',
     }),
     new MiniCssExtractPlugin(),
   ],
