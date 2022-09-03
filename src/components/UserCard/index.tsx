@@ -41,11 +41,7 @@ const WALLET_VIEWS = {
     PENDING: "pending", // while login
 };
 
-export default function UserCard({
-    ENSName,
-}: {
-    ENSName?: string;
-}): JSX.Element {
+export default function UserCard(): JSX.Element {
     // important that these are destructed from the account-specific web3-react context
     const { active, account, connector, activate, error } = useWeb3React();
 
@@ -157,7 +153,6 @@ export default function UserCard({
         if (account && walletView === WALLET_VIEWS.ACCOUNT) {
             return (
                 <Detail
-                    ENSName={ENSName}
                     disconnect={() => setWalletView(WALLET_VIEWS.INIT)}
                 />
             );
@@ -230,10 +225,10 @@ export default function UserCard({
 
                     ) : (
                         <div className="sign-info">
-                            <div> Signature: <br />
+                            <div><span className="sign-label">Signature:</span> <br />
                                 {sig}
                             </div>
-                            <div>PubKey: <br />
+                            <div><span className="sign-label">PubKey:</span> <br />
                                 {pubKey}
                             </div>
                         </div>

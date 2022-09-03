@@ -12,18 +12,17 @@ import { FaSignOutAlt } from "react-icons/fa";
 import shortenAddress from "../../utils/shortenAddress";
 
 interface DetailsProps {
-    ENSName?: string;
     disconnect: () => void;
 }
 
 export default function Detail({
-    ENSName,
     disconnect,
 }: DetailsProps): JSX.Element {
     const { chainId, account, connector } = useWeb3React();
 
     const [balance, setBalance] = useState('');
     const [ensName, setEnsName] = useState<string|null>(null);
+    const [avatar, setAvatar] = useState<string|undefined>(undefined);
 
     useEffect(() => {
         async function getBalance() {
@@ -35,9 +34,12 @@ export default function Detail({
             if(account) {
                 const balance = await provider.getBalance(account);
                 const ensName = await provider.lookupAddress(account);
+                const resolver = ensName ? await provider.getResolver(ensName) : null;
+                let avatar = resolver ? await resolver.getAvatar() : null;
             
                 setBalance(ethers.utils.formatEther(balance));
                 setEnsName(ensName);
+                setAvatar(avatar?.url);
             }
         
         }
@@ -53,7 +55,10 @@ export default function Detail({
                 </a>
             </p>
             <p className="wallet-address">
-                {ensName ? <>{ensName}</> : <>{shortenAddress(account!)}</>}
+                {ensName ? <>
+                {avatar && (<img src={avatar} />)}
+                {ensName}
+                </> : <>{shortenAddress(account!)}</>}
             </p>
 
             <p className="wallet-chain">
